@@ -23,12 +23,6 @@ export class StockItemComponent implements OnInit {
       new Stock('Last Stock Company', 'LSC', 876, 765)
     ];
 
-    // this.stock = new Stock(
-    //   'Test Stock Company',
-    //   'TSC',
-    //   85,
-    //   80,
-    // );
     const diff = (this.stock.price / this.stock.previousPrice - 1);
     const largeChange = Math.abs(diff) > 0.01;
     this.stockClasses = {
