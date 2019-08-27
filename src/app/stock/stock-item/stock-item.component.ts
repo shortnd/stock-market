@@ -9,7 +9,6 @@ import { Stock } from '../../model/stock';
 })
 export class StockItemComponent implements OnInit {
 
-  public stock: Stock;
   public stockClasses;
   public stocks: Array<Stock>;
 
@@ -22,20 +21,15 @@ export class StockItemComponent implements OnInit {
       new Stock('Second Stock Company', 'SSC', 10, 20),
       new Stock('Last Stock Company', 'LSC', 876, 765)
     ];
-
-    const diff = (this.stock.price / this.stock.previousPrice - 1);
-    const largeChange = Math.abs(diff) > 0.01;
-    this.stockClasses = {
-      positive: this.stock.isPositiveChange(),
-      negative: !this.stock.isPositiveChange(),
-      'large-change': largeChange,
-      'small-change': !largeChange
-    }
   }
 
   toggleFavorite(event, index) {
     console.log('We are toggling the favorite state for this stock', index,event);
     this.stocks[index].favorite = !this.stocks[index].favorite;
+  }
+
+  trackStockByCode(index, stock) {
+    return stock.code;
   }
 
 }
