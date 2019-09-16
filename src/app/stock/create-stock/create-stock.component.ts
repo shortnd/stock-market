@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Stock } from '../../model/stock';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Stock } from 'src/app/model/stock';
+
+let counter = 1;
 
 @Component({
   selector: 'app-create-stock',
@@ -7,21 +10,48 @@ import { Stock } from '../../model/stock';
   styleUrls: ['./create-stock.component.scss']
 })
 export class CreateStockComponent {
+  private stock: Stock;
+  public stockForm: FormGroup;
 
-  public stock: Stock;
-  public confirmed = false;
-
-  constructor() {
-    this.stock = new Stock('test', '', 0, 0, 'NASDAQ');
+  constructor(private formBuilder: FormBuilder) {
+    this.createForm();
+    this.stock = new Stock('Test' + counter++, 'TST', 20, 10);
   }
 
-  setStockPrice(price) {
-    this.stock.price = price;
-    this.stock.previousPrice = price;
+  createForm() {
+    this.stockForm = this.formBuilder.group({
+      name: [null, Validators.required],
+      code: [null, [Validators.required, Validators.minLength(2)]],
+      price: [0, [Validators.required, Validators.min(0)]]
+    });
   }
 
-  createStock() {
-    console.log('Create stock ', this.stock);
+  get name() {
+    return this.stockForm.get('name');
   }
 
+  get code() {
+    return this.stockForm.get('code');
+  }
+
+  get price() {
+    return this.stockForm.get('price');
+  }
+
+  loadStockFromServer() {
+    this.stock = new Stock('Test' + counter++, 'TST', 20, 10);
+    const stockFormModel = Object.assign({}, this.stock);
+    delete stockFormModel.previousPrice;
+    delete stockFormModel.favorite;
+    this.stockForm.setValue(stockFormModel);
+  }
+
+  resetForm() {
+    this.stockForm.reset();
+  }
+
+  onSubmit() {
+    this.stock = Object.assign({}, this.stockForm.value);
+    console.log('Saving stock', this.stockForm.value);
+  }
 }

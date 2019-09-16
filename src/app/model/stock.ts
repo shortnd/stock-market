@@ -1,15 +1,14 @@
 export class Stock {
-    favorite = false;
+  favorite = false;
 
-    constructor(
-        public name: string,
-        public code: string,
-        public price: number,
-        public previousPrice: number,
-        public exchange: string
-    ) {}
+  constructor(
+    public name: string,
+    public code: string,
+    public price: number,
+    public previousPrice: number
+  ) {}
 
-    isPositiveChange(): boolean {
-        return this.price >= this.previousPrice;
-    }
+  isPositiveChange(): boolean {
+    return this.price >= this.previousPrice;
+  }
 }

@@ -1,39 +1,59 @@
 <h2>Create Stock Form</h2>
-<div class="form-group">
-    <form (ngSubmit)="createStock()">
-        <div class="stock-name">
-            <input type="text" name="stockName" placeholder="Stock Name" [(ngModel)]="stock.name">
-        </div>
-        <div class="stock-code">
-            <input type="text" name="stockCode" placeholder="Stock Code" [(ngModel)]="stock.code">
-        </div>
-        <div class="stock-price">
-            <input type="number" 
-                    name="stockPrice" 
-                    placeholder="Stock Price" 
-                    [ngModel]="stock.price"
-                    (ngModelChange)="setStockPrice($event)">
-        </div>
-        <div class="stock-exchange">
-            <label>
-                <input type="radio" name="stockExchange" [(ngModel)]="stock.exchange" value="NYSE"> NYSE
-            </label>
-            <label>
-                <input type="radio" name="stockExchange" [(ngModel)]="stock.exchange" value="NASDAQ"> NASDAQ
-            </label>
-            <label>
-                <input type="radio" name="stockExchange" [(ngModel)]="stock.exchange" value="OTHER"> OTHER
-            </label>
-        </div>
 
-        <div class="stock-confirm">
-            <label>
-                <input type="checkbox" name="stockConfirm" [(ngModel)]="confirmed">
-                I confirm that the information provided above is accurate!
-            </label>
+<div class="form-group">
+  <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+    <div class="stock-name">
+      <input
+        type="text"
+        name="stockName"
+        id="stockName"
+        placeholder="Stock Name"
+        formControlName="name"
+      />
+      <div *ngIf="name.invalid && (name.dirty || name.touched)">
+        Name is required
+      </div>
+    </div>
+    <div class="stock-code">
+      <input
+        type="text"
+        name="stockCode"
+        id="stockCode"
+        placeholder="Stock Code"
+        formControlName="code"
+      />
+      <div *ngIf="code.invalid && (code.dirty || code.touched)">
+        <div *ngIf="code.errors.required">
+          Stock Code is required
         </div>
-        <button [disabled]="!confirmed" type="submit">Create</button>
-    </form>
+        <div *ngIf="code.errors.minlength">
+          Stock Code must be at least 2 charaters
+        </div>
+      </div>
+    </div>
+    <div class="stock-price">
+      <input
+        type="number"
+        name="stockPrice"
+        id="stockPrice"
+        placeholder="Stock Price"
+        formControlName="price"
+      />
+      <div *ngIf="price.invalid && (price.dirty || price.touched)">
+        <div *ngIf="price.errors.required">
+          Stock Price is required
+        </div>
+        <div *ngIf="price.errors.min">
+          Stock Price must be positive
+        </div>
+      </div>
+    </div>
+    <button type="submit">Submit</button>
+    <button type="button" (click)="resetForm()">Reset</button>
+    <button type="button" (click)="loadStockFromServer()">Simulate Stock Load from Server</button>
+    <button type="button" (click)="patchStockForm()">Patch Stock Form</button>
+  </form>
 </div>
 
-<h3>Stock name is {{ stock | json }}</h3>
+<p>Form Control value: {{ stockForm.value | json }}</p>
+<p>Form Control status: {{ stockForm.status | json }}</p>
